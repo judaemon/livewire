@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -39,6 +40,11 @@ class UserResource extends Resource
                 ->maxLength(255)
                 ->dehydrated(fn ($state) => filled($state)) // Save only if filled
                 ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
+            Select::make('roles')
+                ->relationship('roles', 'name')
+                ->multiple()
+                ->preload()
+                ->searchable(),
         ]);
     }
 
