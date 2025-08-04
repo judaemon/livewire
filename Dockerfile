@@ -17,6 +17,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
     unzip \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
+# Install the intl extension with root permissions
+RUN install-php-extensions intl
+
 # Set working directory
 WORKDIR /var/www/html
 
