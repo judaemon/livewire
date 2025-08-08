@@ -1,7 +1,7 @@
 {
   "name": "Laravel PHP Development",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "laravel",
+  "service": "grd-filament",
   "workspaceFolder": "/var/www/html",
   "remoteUser": "www-data",
   "customizations": {

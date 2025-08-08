@@ -13,9 +13,9 @@ x-base-service: &base-service
     - nginx-proxy-manager-network
 
 services:
-  laravel:
+  grd-filament:
     <<: *base-service
-    container_name: livewire
+    container_name: grd-filament
     working_dir: /var/www/html
     # healthcheck:
     #   test: ["CMD", "test", "-f", "/var/www/html/vendor/autoload.php"]
@@ -26,7 +26,7 @@ services:
 
   task:
     <<: *base-service
-    container_name: livewire-task
+    container_name: grd-filament-task
     command: ["php", "/var/www/html/artisan", "schedule:work"]
     stop_signal: SIGTERM
     healthcheck:
@@ -36,20 +36,31 @@ services:
       retries: 3
       start_period: 10s
     depends_on:
-      laravel:
+      grd-filament:
         condition: service_healthy
 
   queue:
     <<: *base-service
-    container_name: livewire-queue
+    container_name: grd-filament-queue
     command: ["php", "/var/www/html/artisan", "queue:work", "--tries=3"]
     stop_signal: SIGTERM
     healthcheck:
       test: ["CMD", "healthcheck-queue"]
       start_period: 10s
     depends_on:
-      laravel:
+      grd-filament:
         condition: service_healthy
+
+  reverb:
+    <<: *base-service
+    container_name: grd-filament-reverb
+    command: ["php", "/var/www/html/artisan", "reverb:start", "--host=0.0.0.0", "--port=8000"]
+    stop_signal: SIGTERM
+    ports:
+      - 8000:8000
+    healthcheck:
+      test: ["CMD", "healthcheck-reverb"]
+      start_period: 10s
 
 networks:
   nginx-proxy-manager-network:
